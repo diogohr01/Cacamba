@@ -57,4 +57,7 @@ export default createGlobalStyle`
     .ant-form-item {
         margin-bottom: 10px !important;
     }
+    .ant-card .ant-card-head {
+    border-bottom: none !important; 
+}
 `;

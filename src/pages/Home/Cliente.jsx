@@ -194,7 +194,8 @@ const Table = () => {
                   backgroundColor: colors.background,
                   color: colors.cinzaIcone,
                   borderRadius: 0,
-                  borderColor: colors.background
+                  borderColor: colors.background,
+                  borderBottom: 0
                 }}
               title={<span style={{ color: colors.cinzaIcone, borderBottom: 0}}>Clientes</span>} // Garante que o título siga a cor
               bordered={false}
@@ -209,7 +210,7 @@ const Table = () => {
                   </Button>
                 ) : null
               }
-            >
+            > 
               {view === 'list' ? (
                 <div>
                   <DynamicForm formConfig={filterFormConfig} values={filters} submitOnSide setValues={setFilters} onSubmit={handleFilter} />

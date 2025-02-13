@@ -1,21 +1,7 @@
-import { Button, message, Space, Table } from 'antd';
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
-import { colors } from '../styles/colors';
+import { Button, message, Space } from "antd";
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import { StyledTable, StyledPagination } from "./StylesTable/styles"; // Importando a nova paginação
 
-/**
- * Componente de Tabela Paginada Personalizada
- *
- * @param {function} fetchData - Função assíncrona para buscar dados do backend. Recebe (page, pageSize, sorterField, sortOrder).
- * @param {number} initialPageSize - Define o tamanho inicial da página. Default: 5.
- * @param {boolean} disabled - Desativa a tabela e suas interações. Default: false.
- * @param {array} columns - Array de colunas da tabela no formato [{ title: 'Nome', dataIndex: 'nome', key: 'nome' }].
- * @param {array} actions - Array de objetos para botões de ação na tabela. Exemplo: [{ label: 'Editar', onClick: (record) => {} }].
- * @param {string} rowKey - Chave única para cada linha. Default: 'id'.
- * @param {object} rowSelection - Configurações para seleção de linhas. Exemplo: { selectedRowKeys, onChange: (keys) => {} }.
- * @param {object} expandable - Configurações para linhas expansíveis. Exemplo: { expandedRowRender: (record) => <p>{record.description}</p> }.
- * @param {object} scroll - Define o scroll da tabela para tornar responsiva. Default: { x: 'max-content' }.
- * @param {object} restProps - Outras propriedades padrão para a tabela do Ant Design.
- */
 const PaginatedTable = forwardRef(
     (
         {
@@ -24,11 +10,11 @@ const PaginatedTable = forwardRef(
             disabled = false,
             columns,
             actions = [],
-            rowKey = 'id',
-            rowSelection = null, // Adiciona suporte para seleção de linhas
-            expandable = null, // Suporte para linhas expansíveis
-            scroll = { x: 'max-content' }, // Responsividade
-            ...restProps // Permite passar outras propriedades para a tabela
+            rowKey = "id",
+            rowSelection = null,
+            expandable = null,
+            scroll = { x: "max-content" },
+            ...restProps
         },
         ref
     ) => {
@@ -37,21 +23,17 @@ const PaginatedTable = forwardRef(
             current: 1,
             pageSize: initialPageSize,
             total: 0,
-            showSizeChanger: true, // Adiciona o seletor de tamanho de página
-            pageSizeOptions: ['1', '2', '5', '10', '20', '50'],
-            showTotal: (total, range) => `Mostrando ${range[0]}-${range[1]} de ${total} itens`, // Exibe total de itens
+            showSizeChanger: true,
+            pageSizeOptions: ["5", "10", "20", "50"],
         });
         const [loading, setLoading] = useState(false);
-        const [sorter, setSorter] = useState({ field: null, order: null }); // Estado para manter a ordenação atual
-        const [selectedRowKeys, setSelectedRowKeys] = useState([]); // Estado para linhas selecionadas
+        const [sorter, setSorter] = useState({ field: null, order: null });
 
-        // Função para buscar dados do backend
         const getData = async (page, pageSize, sorterField, sortOrder) => {
             setLoading(true);
             try {
-                // Passa sorterField e sortOrder para a requisição ao backend
                 const response = await fetchData(page, pageSize, sorterField, sortOrder);
-                setData(response.data); // Dados retornados para a tabela
+                setData(response.data);
                 setPagination((prev) => ({
                     ...prev,
                     current: page,
@@ -59,129 +41,70 @@ const PaginatedTable = forwardRef(
                     total: response.total,
                 }));
             } catch (error) {
-                message.error('Erro ao carregar os dados.');
+                message.error("Erro ao carregar os dados.");
             } finally {
                 setLoading(false);
             }
         };
 
-        // Função chamada ao mudar a página, tamanho da página ou a ordenação
         const handleTableChange = (newPagination, filters, newSorter) => {
-            if (disabled) return; // Bloqueia mudanças na tabela se `disabled` for true
-
+            if (disabled) return;
             const { current, pageSize } = newPagination;
             const sorterField = newSorter?.field || null;
             const sortOrder = newSorter?.order || null;
-
-            setSorter({ field: sorterField, order: sortOrder }); // Atualiza o estado de ordenação
+            setSorter({ field: sorterField, order: sortOrder });
             getData(current, pageSize, sorterField, sortOrder);
         };
 
-        // Expor a função `reloadTable` para recarregar os dados de fora do componente
         useImperativeHandle(ref, () => ({
             reloadTable() {
-                getData(pagination.current, pagination.pageSize, sorter?.field, sorter?.order); // Recarregar a tabela
+                getData(pagination.current, pagination.pageSize, sorter?.field, sorter?.order);
             },
         }));
 
         useEffect(() => {
             getData(pagination.current, pagination.pageSize, sorter?.field, sorter?.order);
-            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
 
-        // Adicionar a coluna de ações, se existirem botões de ação
-        const actionColumn = actions.length
-            ? [
-                {
-                    title: 'Ações',
-                    key: 'actions',
-                    fixed: 'right',
-                    width: 150,
-                    render: (text, record) => (
-                        <Space wrap>
-                            {actions.map((action, index) => (
-                                <Button
-                                    key={index}
-                                    type={action.type || 'default'}
-                                    onClick={() => action.onClick(record)}
-                                    loading={action.loading}
-                                    disabled={disabled || action.disabled}
-                                    danger={action.danger || false}
-                                >
-                                    {action.label}
-                                </Button>
-                            ))}
-                        </Space>
-                    ),
-                },
-            ]
-            : [];
-
-        // Mapear colunas e adicionar `sorter` apenas onde for necessário
         const combinedColumns = columns.map((column) => ({
             ...column,
-            sorter: column.dataIndex && column.dataIndex !== 'actions', // Adiciona `sorter: true` apenas se `dataIndex` estiver presente e não for a coluna de ações
-            sortOrder: sorter.field === column.dataIndex ? sorter.order : null, // Define a ordenação atual com base no estado
-        })).concat(actionColumn);
+            sorter: column.dataIndex && column.dataIndex !== "actions",
+            sortOrder: sorter.field === column.dataIndex ? sorter.order : null,
+        }));
 
         return (
-            <Table
-                dataSource={data}
-                columns={combinedColumns}
-                pagination={{
-                    ...pagination,
-                    disabled: disabled,
-                }}
-                loading={loading}
-                onChange={handleTableChange} // Função chamada ao mudar página, ordenação, etc.
-                rowKey={rowKey} // Usar rowKey configurável
-                scroll={scroll} // Adiciona scroll horizontal para evitar layout quebrado com muitas colunas
-                rowSelection={
-                    rowSelection
-                        ? {
-                            selectedRowKeys,
-                            onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                            ...rowSelection,
-                        }
-                        : null
-                }
-                expandable={expandable} // Suporte para linhas expansíveis
-                {...restProps} // Permite passar outras propriedades para a tabela
-                style={{
-                    backgroundColor: colors.cinzaTabela,
-                    //border: colors.background,
-                    borderRadius: "0px", // Define a cor de fundo da tabela
-                }}
+            <>
+                <StyledTable
+                    dataSource={data}
+                    columns={combinedColumns}
+                    pagination={false} // Removemos a paginação do Antd aqui
+                    loading={loading}
+                    onChange={handleTableChange}
+                    rowKey={rowKey}
+                    scroll={scroll}
+                    rowSelection={rowSelection}
+                    expandable={expandable}
+                    {...restProps}
                     components={{
-                        header: {
-                            cell: (props) => (
-                                <th
-                                    {...props}
-                                    style={{
-                                        backgroundColor: colors.cinzaTabelaHeader, // Define a cor de fundo do cabeçalho
-                                        color: colors.cinzaIcone, // Deixa o texto branco para melhor contraste
-                                        padding: '12px',
-                                        borderColor: colors.background,
-                                        borderRadius: "0px", // Define a cor de fundo da tabela
-                                    }}
-                                />
-                            ),
-                        },
                         body: {
-                            row: (props) => (
-                                <tr
-                                {...props}
-                                style={{
-                                    backgroundColor: colors.cinzaTabela,
-                                    color: colors.cinzaIcone,
-                                    borderBottom: 0
-                                }}
-                            />
-                            ),
+                            row: (props) => <tr {...props} className="custom-row" />,
+                            cell: (props) => <td {...props} className="custom-cell" />,
+                        },
+                        header: {
+                            cell: (props) => <th {...props} className="custom-header-cell" />,
                         },
                     }}
-            />
-
+                />
+                <StyledPagination
+                    current={pagination.current}
+                    total={pagination.total}
+                    pageSize={pagination.pageSize}
+                    onChange={(page, pageSize) => getData(page, pageSize, sorter?.field, sorter?.order)}
+                    onShowSizeChange={(current, size) => getData(current, size, sorter?.field, sorter?.order)}
+                    showSizeChanger
+                    pageSizeOptions={pagination.pageSizeOptions}
+                />
+            </>
         );
     }
 );

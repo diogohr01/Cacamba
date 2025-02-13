@@ -2,7 +2,7 @@ import { DownOutlined, MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from
 import { Avatar, Button, Card, Col, Dropdown, Layout, Menu, Row, Space, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import logo from '../../../assets/logo.png';
+import logo from '../../../assets/logo-Photoroom.png';
 import { useAuth } from '../../../hooks/auth';
 import { defaultRoutes } from '../../../routes/routes';
 import { colors } from '../../../styles/colors';
@@ -19,12 +19,12 @@ const UserProfileCard = ({ userName, userRole, appVersion = '1.0.0' }) => {
             style={{
                 width: 300,
                 borderRadius: '10px',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                backgroundColor: colors.cinzaTabela
             }}
         >
             <Space direction="vertical" align="center" style={{ width: '100%' }}>
                 <Avatar size={60} icon={<UserOutlined />} />
-                <Title level={4}>{userName}</Title>
+                <Title level={4} style={{ color: 'white' }}>{userName}</Title>
                 <Button type="primary" onClick={() => signOut()}>
                     Sair
                 </Button>
@@ -100,10 +100,9 @@ const Authorized = ({ children, userName }) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: collapsed ? 'center' : 'flex-start',
-                    padding: '10px',
+                    padding: '8px',
                     cursor: 'pointer',
-                    marginBotom: 10,
-                    transition: 'margin-left 0.5s ease'
+                    marginBotom: 11,
                 }}
             >
                 <img src={logo} alt="Logo" style={{ height: 32 }} />
@@ -118,7 +117,7 @@ const Authorized = ({ children, userName }) => {
     };
 
     return (
-        <Layout style={{ minHeight: '100vh',  backgroundColor: colors.background  }}>
+        <Layout style={{ minHeight: '100vh', backgroundColor: colors.background }}>
             <Sider
                 collapsed={collapsed}
                 trigger={null}
@@ -130,7 +129,7 @@ const Authorized = ({ children, userName }) => {
                     overflow: 'hidden', // Impede que role junto com a página
                     left: 0,
                     backgroundColor: colors.primary,
-                    
+
                 }}
             >
                 <div style={{ height: '100vh', overflowY: 'auto' }}> {/* Apenas este div rola */}
@@ -185,17 +184,37 @@ const Authorized = ({ children, userName }) => {
                             <Dropdown overlay={<UserProfileCard userName={'Teste'} userRole={'Admin'} />} trigger={['click']} placement="bottomRight">
                                 <a onClick={(e) => e.preventDefault()}>
                                     <Space style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-                                        <Avatar size={25} icon={<UserOutlined style={{ color: colors.cinzaIcone, fontSize: '20px', marginTop: '-4px' }} />} />
-                                        {!collapsed && <Text style={{ color: '#fff', fontSize: '16px', marginTop: '-4px' }}>Admin</Text>}
-                                        <DownOutlined style={{ color: colors.cinzaIcone, fontSize: '16px', marginTop: '-4px' }} />
+                                        <Avatar
+                                            size={30} // Aumentei um pouco para melhor proporção
+                                            icon={
+                                                <UserOutlined
+                                                    style={{
+                                                        color: colors.cinzaIcone,
+                                                        fontSize: '18px',
+                                                        padding: '5px', // Adiciona padding interno ao ícone
+                                                        backgroundColor: 'transparent',
+                                                        borderRadius: '50%' // Garante um visual consistente
+                                                    }}
+                                                />
+                                            }
+                                            style={{
+                                                backgroundColor: colors.avatarBg, // Mantém a cor de fundo caso precise
+                                                padding: '4px' // Padding no Avatar também ajuda a centralizar melhor
+                                            }}
+                                        />
+                                        {!collapsed && (
+                                            <Text style={{ color: '#fff', fontSize: '16px', marginLeft: '8px' }}>Admin</Text>
+                                        )}
+                                        <DownOutlined style={{ color: colors.cinzaIcone, fontSize: '16px', marginLeft: '4px' }} />
                                     </Space>
                                 </a>
                             </Dropdown>
                         </Col>
+
                     </Row>
                 </Header>
 
-                <Content style={{ padding: '8px', margin: 0, minHeight: 280,  background: colors.background}}>
+                <Content style={{ padding: '8px', margin: 0, minHeight: 280, background: colors.background }}>
                     <main role="main" >{children}</main>
                 </Content>
             </Layout>

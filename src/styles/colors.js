@@ -8,4 +8,4 @@ export const colors = {
   cinzaTabela: "rgb(29, 39, 44)",
   linha: "rgb(47, 61, 68)",
   input: "rgb(38, 50, 56)",
-};  
+};

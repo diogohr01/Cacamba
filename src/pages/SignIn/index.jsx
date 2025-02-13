@@ -1,7 +1,7 @@
 import { Card, Col, Row } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo-Photoroom.png';
 import DynamicForm from '../../components/Form';
 import { colors } from '../../styles/colors';
 import { useAuth } from '../../hooks/auth';
@@ -31,13 +31,17 @@ const SignIn = () => {
       style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primary }}
     >
       <Col span={6} style={{ textAlign: 'center' }}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <img src={logo} alt="Logo" style={{ height: 50, marginBottom: 0 }} />
+        <div style={{ display: "flex", alignItems: "center", marginBottom: 3 }}>
+          <img src={logo} alt="Logo" style={{ height: 50, }} />
           <span style={{ color: colors.white, fontSize: 33, fontWeight: "", marginLeft: 10 }}>
             <strong>My </strong>Task
           </span>
         </div>
-        <Card title="Login" bordered={false}>
+        <Card
+          title={<span style={{ color: 'white' , fontSize: '24px', marginTop: '12px'}}>Login</span>}
+          bordered={false}
+          style={{ backgroundColor: colors.cinzaTabela, color: 'white' }}
+        >
           {loading ?
             <Loading /> :
             <DynamicForm
