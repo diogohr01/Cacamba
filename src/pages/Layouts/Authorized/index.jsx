@@ -3,7 +3,6 @@ import { Avatar, Button, Card, Col, Dropdown, Layout, Menu, Row, Space, Typograp
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
-import CustomModal from '../../../components/Modal';
 import { useAuth } from '../../../hooks/auth';
 import { defaultRoutes } from '../../../routes/routes';
 import { colors } from '../../../styles/colors';
@@ -26,9 +25,6 @@ const UserProfileCard = ({ userName, userRole, appVersion = '1.0.0' }) => {
             <Space direction="vertical" align="center" style={{ width: '100%' }}>
                 <Avatar size={60} icon={<UserOutlined />} />
                 <Title level={4}>{userName}</Title>
-                <Text type="secondary">{userRole}</Text>
-                <Text type="secondary">v{appVersion}</Text>
-
                 <Button type="primary" onClick={() => signOut()}>
                     Sair
                 </Button>
@@ -40,7 +36,6 @@ const UserProfileCard = ({ userName, userRole, appVersion = '1.0.0' }) => {
 // Função para gerar itens do Menu dinamicamente
 const generateMenuItems = (routes) => {
     return routes
-        // Filtra rotas que não estejam marcadas como ocultas
         .filter((route) => !route.hidden)
         .map((route) => {
             if (route.children) {
@@ -48,27 +43,26 @@ const generateMenuItems = (routes) => {
                     key: route.key,
                     icon: route.icon,
                     label: route.label,
-                    children: generateMenuItems(route.children), // Gera os submenus recursivamente
+                    children: generateMenuItems(route.children),
+                    style: { marginTop: '10px' }, // Adiciona padding nos submenus
                 };
             }
             return {
                 key: route.key,
                 icon: route.icon,
                 label: route.label,
+                style: { marginTop: '10px' }, // Adiciona padding nos itens do menu
             };
         });
 };
 
-// Componente Principal Autorizado
 const Authorized = ({ children, userName }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [collapsed, setCollapsed] = useState(true);
+    const [routes] = useState(defaultRoutes);
     const [openKeys, setOpenKeys] = useState([]);
-    const [routes] = useState(defaultRoutes); // Estado inicial com rotas dinâmicas
-    const [collapsed, setCollapsed] = useState(true); // Estado para controlar o collapse
-    const [openConfirmModal, setOpenConfirmModal] = useState(false); // Estado para controlar a visibilidade do modal de confirmação
 
-    // Efeito para determinar quais submenus devem estar abertos com base na rota atual
     useEffect(() => {
         const segments = location.pathname.split('/').filter(Boolean);
         const rootSubmenuKeys = defaultRoutes.map((x) => x.key);
@@ -88,128 +82,124 @@ const Authorized = ({ children, userName }) => {
         setOpenKeys(newOpenKeys);
     }, [location]);
 
-    // Função para lidar com mudanças nos submenus abertos
-    const handleOpenChange = (keys) => {
-        setOpenKeys(keys);
-    };
-
-    // Função para alternar o estado de colapso
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
     };
 
-    // Função para lidar com cliques no menu e verificar se é a mesma rota
     const handleMenuClick = ({ key }) => {
-        if (key === location.pathname) {
-            setOpenConfirmModal(true); // Abre o modal de confirmação se a rota for a mesma
-        } else {
-            navigate(key);
-        }
+        navigate(key);
     };
 
-    // Função de confirmação para recarregar a página
-    const handleConfirm = () => {
-        setOpenConfirmModal(false); // Fecha o modal
-        navigate(0); // Recarrega a página
+    // Primeiro item da barra lateral (Logo)
+    const logoItem = {
+        key: 'logo',
+        label: (
+            <div
+                onClick={() => navigate('/')}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: collapsed ? 'center' : 'flex-start',
+                    padding: '10px',
+                    cursor: 'pointer',
+                    marginBotom: 10,
+                    transition: 'margin-left 0.5s ease'
+                }}
+            >
+                <img src={logo} alt="Logo" style={{ height: 32 }} />
+                {!collapsed && (
+                    <span style={{ marginLeft: '10px', fontSize: '16px', fontWeight: 'bold', color: '#fff' }}>
+                        MyTask
+                    </span>
+                )}
+            </div>
+        ),
+        disabled: true, // Evita que o usuário clique e selecione o item
     };
-
-    // Definição dos itens do menu lateral
-    const sidebarMenu = (
-        <Menu
-            mode="inline"
-            selectedKeys={[location.pathname]}
-            openKeys={openKeys}
-            onOpenChange={handleOpenChange}
-            style={{ height: '100%', borderRight: 0, backgroundColor: colors.primary }}
-            onClick={handleMenuClick} // Adiciona a lógica de clique no menu
-            items={generateMenuItems(routes)} // Gera os itens do menu dinamicamente
-        />
-    );
-
-    // Definição do menu dropdown do usuário
-    const userDropdownMenu = (
-        <div style={{ padding: '16px'}}>
-            <UserProfileCard userName={'Teste'} userRole={'Admin'} appVersion={'1.0.0'} />
-        </div>
-    );
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
-            <Header style={{ backgroundColor: colors.primary, position: 'sticky', top: 0, zIndex: 1, padding: '0 16px' }}>
-                <Row justify="space-between" align="middle">
-                    <Col>
-                        <Row align="middle" gutter={16}>
-                            <Col>
-                                <Button
-                                    type="text"
-                                    onClick={toggleCollapsed}
-                                    style={{
-                                        marginLeft: "9px",
-                                        color: '#fff',
-                                        fontSize: '16px',
-                                        marginRight: '16px',
-                                    }}
-                                    icon={collapsed ? <MenuUnfoldOutlined style={{ color: colors.cinzaIcone }} /> : <MenuFoldOutlined style={{ color: colors.cinzaIcone }} />}
-                                />
-                            </Col>
-                            {/* Logo e Título */}
-                            <Col onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', paddingLeft: "8px" }}>
-                                <img src={logo} alt="Logo" style={{ height: 25 }} />
-                                <Text style={{ color: '#fff', fontSize: '23px', marginLeft: '8px' }}>MyTask</Text>
-                            </Col>
-                        </Row>
-                    </Col>
-
-                    {/* Seção Direita do Header */}
-                    <Col >
-                        <Dropdown overlay={userDropdownMenu} trigger={['click']} placement="bottomRight" >
-                            <a onClick={(e) => e.preventDefault()}>
-                                <Space >
-                                    <Avatar size={24} icon={<UserOutlined  style={{color: colors.cinzaIcone}}/>}  />
-                                    {!collapsed && <Text style={{ color: '#fff' }}>Admin</Text>}
-                                    <DownOutlined style={{ color: colors.cinzaIcone }} />
-                                </Space>
-                            </a>
-                        </Dropdown>
-                    </Col>
-                </Row>
-            </Header>
-
-            {/* Layout Principal com Sider e Conteúdo */}
-            <Layout
-            style={{backgroundColor: colors.primary}}
+        <Layout style={{ minHeight: '100vh',  backgroundColor: colors.background  }}>
+            <Sider
+                collapsed={collapsed}
+                trigger={null}
+                collapsible
+                width={200}
+                style={{
+                    position: 'fixed', // Fixa a barra lateral
+                    height: '100vh',
+                    overflow: 'hidden', // Impede que role junto com a página
+                    left: 0,
+                    backgroundColor: colors.primary,
+                    
+                }}
             >
-                {/* Barra Lateral (Sider) */}
-                <Sider
-                    collapsed={collapsed}
-                    onCollapse={(value) => setCollapsed(value)}
-                    width={200}
+                <div style={{ height: '100vh', overflowY: 'auto' }}> {/* Apenas este div rola */}
+                    <Menu
+                        mode="inline"
+                        selectedKeys={[location.pathname]}
+                        openKeys={openKeys}
+                        style={{ borderRight: 0, backgroundColor: colors.primary }}
+                        onClick={handleMenuClick}
+                        items={[logoItem, ...generateMenuItems(routes)]}
+                    />
+                </div>
+            </Sider>
+
+            <Layout
+                style={{
+                    marginLeft: collapsed ? 80 : 200, // Ajuste para acompanhar o colapse do sidebar
+                    transition: 'margin-left 0.5s ease', // Adiciona animação suave ao expandir/recolher
+                }}
+            >
+                <Header
                     style={{
+                        backgroundColor: colors.background,
                         position: 'sticky',
-                        top: 66,
-                        height: '92vh',
-                        overflow: 'auto', 
+                        top: 0,
+                        zIndex: 1,
+                        padding: '0 16px',
+                        width: '100%',
+                        height: 60
                     }}
                 >
-                    {sidebarMenu}
-                </Sider>
+                    <Row justify="space-between" align="middle" style={{ width: '100%' }}>
+                        <Col>
+                            <Button
+                                type="text"
+                                onClick={toggleCollapsed}
+                                style={{
+                                    marginLeft: "9px",
+                                    color: '#fff',
+                                    fontSize: '16px',
+                                    display: 'flex',
+                                    alignItems: 'center', // Mantém alinhado
+                                }}
+                                icon={
+                                    collapsed
+                                        ? <MenuUnfoldOutlined style={{ color: colors.cinzaIcone, fontSize: '18px', paddingTop: '-20px' }} />
+                                        : <MenuFoldOutlined style={{ color: colors.cinzaIcone, fontSize: '18px', paddingTop: '-20px' }} />
+                                }
+                            />
+                        </Col>
+                        <Col>
+                            <Dropdown overlay={<UserProfileCard userName={'Teste'} userRole={'Admin'} />} trigger={['click']} placement="bottomRight">
+                                <a onClick={(e) => e.preventDefault()}>
+                                    <Space style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+                                        <Avatar size={25} icon={<UserOutlined style={{ color: colors.cinzaIcone, fontSize: '20px', marginTop: '-4px' }} />} />
+                                        {!collapsed && <Text style={{ color: '#fff', fontSize: '16px', marginTop: '-4px' }}>Admin</Text>}
+                                        <DownOutlined style={{ color: colors.cinzaIcone, fontSize: '16px', marginTop: '-4px' }} />
+                                    </Space>
+                                </a>
+                            </Dropdown>
+                        </Col>
+                    </Row>
+                </Header>
 
-                {/* Conteúdo Principal */}
-                <Layout >
-                    <Content style={{ padding: '8px', margin: 0, minHeight: 280 }}>
-                        <main role="main">{children}</main>
-                    </Content>
-                </Layout>
+                <Content style={{ padding: '8px', margin: 0, minHeight: 280,  background: colors.background}}>
+                    <main role="main" >{children}</main>
+                </Content>
             </Layout>
 
-            <CustomModal
-                title="Recarregar Página"
-                content="Você já está nesta página. Deseja recarregar?"
-                open={openConfirmModal}
-                confirmFunction={handleConfirm} // Função de confirmação
-                confirmButtonText="Recarregar"
-                onCancel={() => setOpenConfirmModal(false)} // Fecha o modal ao cancelar
-            />
         </Layout>
     );
 };

@@ -5,6 +5,7 @@ import DynamicForm from '../../components/Form';
 import Loading from '../../components/Loading';
 import PaginatedTable from '../../components/PaginatedTable';
 import Api from '../../services/api';
+import { colors } from '../../styles/colors';
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -180,7 +181,13 @@ const Table = () => {
         <Row gutter={[8, 8]}>
           <Col span={24}>
             <Card
-              title="Habilidades"
+            style={{
+                  backgroundColor: colors.background,
+                  color: colors.cinzaIcone,
+                  borderRadius: 0,
+                  borderColor: colors.background
+                }}
+              title={<span style={{ color: colors.cinzaIcone, borderBottom: 0}}>Habilidades</span>} // Garante que o título siga a cor
               bordered={false}
               extra={
                 view === 'list' ? (

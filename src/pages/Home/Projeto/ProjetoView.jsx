@@ -66,6 +66,10 @@ const ProjetoView = () => {
     fetchProjeto();
   }, [id]);
 
+
+  console.log("id: ", id)
+
+  //Getall todas atividade pai que o idProjeto for === id (recebido)
   const fetchData = useCallback(
     async (page, pageSize, sorterField, sortOrder) => {
       setLoading(true);
@@ -101,7 +105,7 @@ const ProjetoView = () => {
     { title: 'Nome', dataIndex: 'text', key: 'nome', render: (text) => <strong>{text}</strong> },
     { title: 'Horas Estimadas', dataIndex: 'horasEstimadas', key: 'horasEstimadas' },
     { title: 'Horas Atuais', dataIndex: '', key: '' }, //Calcular as horas cobradas e não cobradas
-    { title: 'Progresso', dataIndex: '', key: '',}, //Calcular a partir da porcentagem das atividades filho
+    { title: 'Progresso', dataIndex: '', key: '', }, //Calcular a partir da porcentagem das atividades filho
   ];
 
   if (loading) {
@@ -113,24 +117,30 @@ const ProjetoView = () => {
   }
 
   return (
-    <Card title={`${projeto.Nome}`}>
+    <Card style={{
+      backgroundColor: colors.background,
+      color: colors.cinzaIcone,
+      borderRadius: 0,
+      borderColor: colors.background
+    }}
+      title={`${projeto.Nome}`}>
       {/* Botões abaixo do título */}
       <div style={{ marginBottom: '16px', display: 'flex', gap: '8px' }}>
-        <Button onClick={() => navigate(-1)} style={{marginRight: 8, backgroundColor: colors.background}} >
-          <p style={{ color: "#fff "}}>Atividades</p>
+        <Button onClick={() => navigate(-1)} style={{ marginRight: 8, backgroundColor: colors.background }} >
+          <p style={{ color: "#fff " }}>Atividades</p>
         </Button>
-        <Button  onClick={() => navigate(-1)} style={{marginRight: 8}}>
+        <Button onClick={() => navigate(-1)} style={{ marginRight: 8 }}>
           Acesso
         </Button>
-        <Button  onClick={() => navigate(-1)} style={{marginRight: 8}}>
+        <Button onClick={() => navigate(-1)} style={{ marginRight: 8 }}>
           Informaçoes
         </Button>
       </div>
 
       <div>
-        <DynamicForm formConfig={filterFormConfig} values={filters} submitOnSide setValues={setFilters} onSubmit={handleFilter} /> 
+        <DynamicForm formConfig={filterFormConfig} values={filters} submitOnSide setValues={setFilters} onSubmit={handleFilter} />
         <PaginatedTable ref={tableRef} disabled={loading} fetchData={fetchData} initialPageSize={5} columns={columns} // Adaptar o PaginatedTable para o tipo de requisição que sera recebida do AtividadePai/getall
-        /> 
+        />
       </div>
     </Card>
   );

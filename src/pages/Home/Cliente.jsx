@@ -190,7 +190,13 @@ const Table = () => {
         <Row gutter={[8, 8]}>
           <Col span={24}>
             <Card
-              title="Clientes"
+            style={{
+                  backgroundColor: colors.background,
+                  color: colors.cinzaIcone,
+                  borderRadius: 0,
+                  borderColor: colors.background
+                }}
+              title={<span style={{ color: colors.cinzaIcone, borderBottom: 0}}>Clientes</span>} // Garante que o título siga a cor
               bordered={false}
               extra={
                 view === 'list' ? (

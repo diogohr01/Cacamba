@@ -1,5 +1,6 @@
 import { Button, message, Space, Table } from 'antd';
 import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import { colors } from '../styles/colors';
 
 /**
  * Componente de Tabela Paginada Personalizada
@@ -129,7 +130,7 @@ const PaginatedTable = forwardRef(
                 columns={combinedColumns}
                 pagination={{
                     ...pagination,
-                    disabled: disabled, // Desativa a paginação quando `disabled` for true
+                    disabled: disabled,
                 }}
                 loading={loading}
                 onChange={handleTableChange} // Função chamada ao mudar página, ordenação, etc.
@@ -146,7 +147,41 @@ const PaginatedTable = forwardRef(
                 }
                 expandable={expandable} // Suporte para linhas expansíveis
                 {...restProps} // Permite passar outras propriedades para a tabela
+                style={{
+                    backgroundColor: colors.cinzaTabela,
+                    //border: colors.background,
+                    borderRadius: "0px", // Define a cor de fundo da tabela
+                }}
+                    components={{
+                        header: {
+                            cell: (props) => (
+                                <th
+                                    {...props}
+                                    style={{
+                                        backgroundColor: colors.cinzaTabelaHeader, // Define a cor de fundo do cabeçalho
+                                        color: colors.cinzaIcone, // Deixa o texto branco para melhor contraste
+                                        padding: '12px',
+                                        borderColor: colors.background,
+                                        borderRadius: "0px", // Define a cor de fundo da tabela
+                                    }}
+                                />
+                            ),
+                        },
+                        body: {
+                            row: (props) => (
+                                <tr
+                                {...props}
+                                style={{
+                                    backgroundColor: colors.cinzaTabela,
+                                    color: colors.cinzaIcone,
+                                    borderBottom: 0
+                                }}
+                            />
+                            ),
+                        },
+                    }}
             />
+
         );
     }
 );

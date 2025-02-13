@@ -1,5 +1,5 @@
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { Button, Checkbox, Col, DatePicker, Divider, Form, Input, InputNumber, Popover, Radio, Row, Select, TimePicker, TreeSelect } from "antd";
+import { Button, Checkbox, Col, ConfigProvider, DatePicker, Divider, Form, Input, InputNumber, Popover, Radio, Row, Select, TimePicker, TreeSelect } from "antd";
 import dayjs from "dayjs";
 import 'dayjs/locale/pt-br';
 import debounce from "lodash/debounce";
@@ -8,6 +8,7 @@ import { AiOutlineClose, AiOutlineSend } from "react-icons/ai";
 import InputMask from "react-input-mask";
 import DropzoneComponent from "./FileUpload";
 import { SketchPicker } from "react-color";
+import { colors } from "../styles/colors";
 
 dayjs.locale("pt-br"); // Define o locale do dayjs para português
 
@@ -503,7 +504,7 @@ const DynamicForm = ({ formConfig, values, setValues, submitText = "Enviar", onS
         const colSpan = 24 / columns;
 
         return (
-            <Row gutter={[8, 8]}>
+            <Row gutter={[8, 8]} >
                 {questions.map((question) => (
                     <Col span={colSpan} key={question.id}>
                         <Form.Item
@@ -580,23 +581,61 @@ const DynamicForm = ({ formConfig, values, setValues, submitText = "Enviar", onS
     };
 
     return (
-        <Form form={form} layout="vertical" style={{ marginBottom: 10 }}>
+        <Form form={form} layout="vertical" style={{ marginBottom: 10, backgroundColor: colors.cinzaTabela, padding: 10 }}>
             {submitOnSide ? (
                 <Row gutter={16} align="bottom" justify="end">
                     <Col flex="auto">
                         {formConfig?.map((section, index) => (
-                            <div key={index}>
+                            <div key={index} style={{ color: colors.cinzaIcone }}>
                                 {section.title && (
-                                    <h3 style={{ marginTop: index > 0 ? 25 : 0, marginBottom: 5 }}>{section.title}</h3>
+                                    <h3 style={{ marginTop: index > 0 ? 25 : 0, marginBottom: 5, color: colors.cinzaIcone }}>{section.title}</h3>
                                 )}
-                                {renderQuestions(section.questions, section.columns)}
+                                <ConfigProvider
+                                    theme={{
+                                        components: {
+                                            Form: {
+                                                labelColor: colors.cinzaIcone,
+                                            },
+                                            Input: {
+                                                colorBgContainer: colors.input, // Cor de fundo
+                                                colorBorder: colors.input, // Cor da borda
+                                                colorText: colors.white, // Cor do texto do input
+                                                borderRadius: 0, // Sem bordas arredondadas
+                                            },
+                                            Select: {
+                                                borderRadius: 0,
+                                                colorBgContainer: colors.input,
+                                                colorBorder: colors.input,
+                                                colorText: colors.white, // Cor do texto do select
+                                                labelColor: colors.white
+
+                                            },
+                                            DatePicker: {
+                                                borderRadius: 0,
+                                                colorBgContainer: colors.input,
+                                                colorText: colors.white, // Cor do texto do DatePicker
+                                                labelColor: colors.white
+
+                                            },
+                                            InputNumber: {
+                                                borderRadius: 0,
+                                                colorBgContainer: colors.input,
+                                                colorText: colors.white, // Cor do texto do InputNumber
+                                                labelColor: colors.white
+
+                                            },
+                                        },
+                                    }}
+                                >
+                                    {renderQuestions(section.questions, section.columns)}
+                                </ConfigProvider>
                             </div>
                         ))}
                     </Col>
                     <Col flex="none">
                         <Button
                             onClick={handleClear}
-                            style={{ marginBottom: 10, marginRight: 8 }}
+                            style={{ marginBottom: 10, marginRight: 8, backgroundColor: colors.cinzaIcone, borderRadius: 1 }}
                         >
                             Limpar Filtros
                         </Button>
@@ -604,7 +643,7 @@ const DynamicForm = ({ formConfig, values, setValues, submitText = "Enviar", onS
                             type="primary"
                             icon={<AiOutlineSend />}
                             onClick={handleSubmit}
-                            style={{ marginBottom: 10 }}
+                            style={{ marginBottom: 10, borderRadius: 1 }}
                         >
                             {submitText}
                         </Button>
@@ -618,7 +657,45 @@ const DynamicForm = ({ formConfig, values, setValues, submitText = "Enviar", onS
                             {section.title && (
                                 <h3 style={{ marginTop: index > 0 ? 25 : 0, marginBottom: 5 }}>{section.title}</h3>
                             )}
-                            {renderQuestions(section.questions, section.columns)}
+                            <ConfigProvider
+                                theme={{
+                                    components: {
+                                        Form: {
+                                            labelColor: colors.cinzaIcone,
+                                        },
+                                        Input: {
+                                            colorBgContainer: colors.input, // Cor de fundo
+                                            colorBorder: colors.input, // Cor da borda
+                                            colorText: colors.white, // Cor do texto do input
+                                            borderRadius: 0, // Sem bordas arredondadas
+                                        },
+                                        Select: {
+                                            borderRadius: 0,
+                                            colorBgContainer: colors.input,
+                                            colorBorder: colors.input,
+                                            colorText: colors.white, // Cor do texto do select
+                                            labelColor: colors.white
+
+                                        },
+                                        DatePicker: {
+                                            borderRadius: 0,
+                                            colorBgContainer: colors.input,
+                                            colorText: colors.white, // Cor do texto do DatePicker
+                                            labelColor: colors.white
+
+                                        },
+                                        InputNumber: {
+                                            borderRadius: 0,
+                                            colorBgContainer: colors.input,
+                                            colorText: colors.white, // Cor do texto do InputNumber
+                                            labelColor: colors.white
+
+                                        },
+                                    },
+                                }}
+                            >
+                                {renderQuestions(section.questions, section.columns)}
+                            </ConfigProvider>
                         </div>
                     ))}
                     <Divider />

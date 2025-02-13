@@ -6,6 +6,8 @@ import Loading from '../../../components/Loading';
 import PaginatedTable from '../../../components/PaginatedTable';
 import Api from '../../../services/api';
 import { useNavigate } from 'react-router-dom';
+import { colors } from '../../../styles/colors';
+import { color } from 'framer-motion';
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -234,20 +236,38 @@ const Table = () => {
   ];
 
   return (
-    <Layout>
-      <Content>
+    <Layout style={{ backgroundColor: colors.background, color: colors.cinzaIcone }}>
+      <Content style={{ color: colors.cinzaIcone }}>
         <Row gutter={[8, 8]}>
           <Col span={24}>
             <Card
-              title="Projetos"
+              style={{
+                backgroundColor: colors.background,
+                color: colors.cinzaIcone,
+                borderRadius: 0,
+                borderBottomColor: colors.background
+              }}
+              title={<span style={{ color: colors.cinzaIcone }}>Projetos</span>} // Garante que o título siga a cor
               bordered={false}
               extra={
                 view === 'list' ? (
-                  <Button type="primary" icon={<AiOutlinePlus />} onClick={handleAdd} disabled={loading}>
+                  <Button
+                    type="primary"
+                    icon={<AiOutlinePlus />}
+                    onClick={handleAdd}
+                    disabled={loading}
+                    style={{ color: colors.cinzaIcone }}
+                  >
                     Adicionar Projeto
                   </Button>
                 ) : view === 'form' ? (
-                  <Button type="primary" icon={<AiOutlineArrowLeft />} onClick={handleCancel} disabled={loading}>
+                  <Button
+                    type="primary"
+                    icon={<AiOutlineArrowLeft />}
+                    onClick={handleCancel}
+                    disabled={loading}
+                    style={{ color: colors.cinzaIcone }}
+                  >
                     Voltar para a Lista
                   </Button>
                 ) : null
@@ -255,7 +275,14 @@ const Table = () => {
             >
               {view === 'list' ? (
                 <>
-                  <DynamicForm formConfig={filterFormConfig} values={filters} submitOnSide setValues={setFilters} onSubmit={handleFilter} />
+                  <DynamicForm
+                    formConfig={filterFormConfig}
+                    values={filters}
+                    submitOnSide
+                    setValues={setFilters}
+                    onSubmit={handleFilter}
+                    style={{ color: colors.cinzaIcone }}
+                  />
                   <PaginatedTable
                     ref={tableRef}
                     disabled={loading}
@@ -264,13 +291,24 @@ const Table = () => {
                     columns={columns}
                     onRow={(record) => ({
                       onClick: () => handleItemClick(record),
-                      style: { cursor: 'pointer' },
+                      style: { cursor: 'pointer', color: colors.cinzaIcone },
                     })}
                   />
                 </>
               ) : (
-                <div>
-                  {loading ? <Loading /> : <DynamicForm formConfig={formConfig} values={formValues} setValues={setFormValues} onSubmit={handleSave} onClose={handleCancel} />}
+                <div style={{ color: colors.cinzaIcone }}>
+                  {loading ? (
+                    <Loading />
+                  ) : (
+                    <DynamicForm
+                      formConfig={formConfig}
+                      values={formValues}
+                      setValues={setFormValues}
+                      onSubmit={handleSave}
+                      onClose={handleCancel}
+                      style={{ color: colors.cinzaIcone }}
+                    />
+                  )}
                 </div>
               )}
             </Card>
@@ -278,6 +316,7 @@ const Table = () => {
         </Row>
       </Content>
     </Layout>
+
   );
 };
 

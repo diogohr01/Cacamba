@@ -10585,6 +10585,11 @@ react-error-overlay@^6.0.11:
   resolved "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.11.tgz"
   integrity sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==
 
+react-gantt-chart@^0.3.0-rc.11:
+  version "0.3.0-rc.11"
+  resolved "https://registry.yarnpkg.com/react-gantt-chart/-/react-gantt-chart-0.3.0-rc.11.tgz#db4dffc788433899f4691135ed94e48378556628"
+  integrity sha512-Skgk6xPZcYKsJ77zUJWpzc6i99Yb3JAsEJ3+PDtayrPq/9Ci5GqzkkWMyJwkd5rGfD9CXITuqKj39Lzv4Fm8wQ==
+
 react-gantt-timeline@^0.4.3:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/react-gantt-timeline/-/react-gantt-timeline-0.4.3.tgz#f242b1c5058726ae338b6a1f8aa5c06f8aabde35"

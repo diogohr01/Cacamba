@@ -26,18 +26,18 @@ const Charts = React.lazy(() => import('../pages/Home/charts'));
 
 // Rotas dinâmicas (pode ser carregado de uma API)
 export const defaultRoutes = [
-    { key: '/Gantt', icon: <FaChartGantt style={{ color: colors.white }}/>, label: <span style={{ color: colors.white }}>Projeto</span>, element: Gantt, roles: [roles.roleAdmin] },
-    { key: '/cliente', icon: <IoMdPeople style={{ color: colors.white }} />, label: <span style={{ color: colors.white }}>Cliente</span>, element: Cliente, roles: [roles.roleAdmin] },
-    { key: '/empresa', icon: <HiBuildingOffice style={{ color: colors.white }} />, label: <span style={{ color: colors.white }}>Empresa</span>, element: Empresa, roles: [roles.roleAdmin]},
-    { key: '/habilidade', icon: <GiSkills style={{ color: colors.white }}/>, label: <span style={{ color: colors.white }}>Habilidade</span>, element: Habilidade, roles: [roles.roleAdmin] },
-    { key: '/tag', icon: <IoIosPricetag style={{ color: colors.white }}/>, label: <span style={{ color: colors.white }}>Tag</span>, element: Tag, roles: [roles.roleAdmin] },
-    { key: '/projeto', icon: <FaFileAlt style={{ color: colors.white }}/>, label: <span style={{ color: colors.white }}>Projeto</span>, element: Projeto, roles: [roles.roleAdmin] },
-    { key: '/projeto/:id', icon: <IoIosPricetag style={{ color: colors.white }} />, label: <span style={{ color: colors.white }}>Projeto Detalhado</span>, element: ProjetoView, roles: [roles.roleAdmin], hidden: true },
-    { key: '/Kanban', icon: <IoMdMove  style={{ color: colors.white }}/>, label: <span style={{ color: colors.white }}>Projeto</span>, element: Kanban, roles: [roles.roleAdmin] },
+    { key: '/Gantt', icon: <FaChartGantt style={{ color: colors.cinzaIcone }}/>, label: <span style={{ color: colors.cinzaIcone }}>Projeto</span>, element: Gantt, roles: [roles.roleAdmin] },
+    { key: '/cliente', icon: <IoMdPeople style={{ color: colors.cinzaIcone }} />, label: <span style={{ color: colors.cinzaIcone }}>Cliente</span>, element: Cliente, roles: [roles.roleAdmin] },
+    { key: '/empresa', icon: <HiBuildingOffice style={{ color: colors.cinzaIcone }} />, label: <span style={{ color: colors.cinzaIcone }}>Empresa</span>, element: Empresa, roles: [roles.roleAdmin]},
+    { key: '/habilidade', icon: <GiSkills style={{ color: colors.cinzaIcone }}/>, label: <span style={{ color: colors.cinzaIcone }}>Habilidade</span>, element: Habilidade, roles: [roles.roleAdmin] },
+    { key: '/tag', icon: <IoIosPricetag style={{ color: colors.cinzaIcone }}/>, label: <span style={{ color: colors.cinzaIcone }}>Tag</span>, element: Tag, roles: [roles.roleAdmin] },
+    { key: '/projeto', icon: <FaFileAlt style={{ color: colors.cinzaIcone }}/>, label: <span style={{ color: colors.cinzaIcone }}>Projeto</span>, element: Projeto, roles: [roles.roleAdmin] },
+    { key: '/projeto/:id', icon: <IoIosPricetag style={{ color: colors.cinzaIcone }} />, label: <span style={{ color: colors.cinzaIcone }}>Projeto Detalhado</span>, element: ProjetoView, roles: [roles.roleAdmin], hidden: true },
+    { key: '/Kanban', icon: <IoMdMove  style={{ color: colors.cinzaIcone }}/>, label: <span style={{ color: colors.cinzaIcone }}>Projeto</span>, element: Kanban, roles: [roles.roleAdmin] },
 
-    { key: '/', icon: <AiFillHome style={{ color: colors.white }}/>, label: 'Home', element: Home, roles: [roles.roleAdmin] },
-    { key: '/form', icon: <AiFillEdit style={{ color: colors.white }}/>, label: 'Formulário - Exemplo', element: Form, roles: [roles.roleAdmin] },
-    { key: '/formbuilder', icon: <AiOutlineForm style={{ color: colors.white }}/>, label: 'Gerador de Form', element: DragAndDropForm, roles: [roles.roleAdmin] },
-    { key: '/modal', icon: <AiOutlineWindows style={{ color: colors.white }}/>, label: 'Modal - Exemplo', element: ModalExample, roles: [roles.roleAdmin] },
-    { key: '/charts', icon: <AiOutlinePieChart style={{ color: colors.white }}/>, label: 'Charts - Exemplo', element: Charts, roles: [roles.roleAdmin] },
+    { key: '/', icon: <AiFillHome style={{ color: colors.cinzaIcone }}/>, label: 'Home', element: Home, roles: [roles.roleAdmin] },
+    { key: '/form', icon: <AiFillEdit style={{ color: colors.cinzaIcone }}/>, label: 'Formulário - Exemplo', element: Form, roles: [roles.roleAdmin] },
+    { key: '/formbuilder', icon: <AiOutlineForm style={{ color: colors.cinzaIcone }}/>, label: 'Gerador de Form', element: DragAndDropForm, roles: [roles.roleAdmin] },
+    { key: '/modal', icon: <AiOutlineWindows style={{ color: colors.cinzaIcone }}/>, label: 'Modal - Exemplo', element: ModalExample, roles: [roles.roleAdmin] },
+    { key: '/charts', icon: <AiOutlinePieChart style={{ color: colors.cinzaIcone }}/>, label: 'Charts - Exemplo', element: Charts, roles: [roles.roleAdmin] },
 ];
